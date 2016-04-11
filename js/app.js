@@ -25,7 +25,13 @@ $(document).ready(function(){
 		//If guess is not repeated cont game and update view.
 		if(!isRepeated($userGuess, guesses)){
 			updateStage($userGuess);
-			isHotOrCold(secretNum, $userGuess);
+
+			if($userGuess === secretNum){
+				$("#feedback").text("You won!!! Click new game to play again!");
+				$("#guessButton").css("visibility", "hidden");
+			} else {
+				isHotOrCold($userGuess, secretNum);
+			}
 		} else {
 			$("#feedback").text($userGuess + " was already chosen!");
 			return;
@@ -47,6 +53,7 @@ $(document).ready(function(){
   		guessNum = 0;	
 		secretNum = getRandom();
 		guesses = [];
+		$("#guessButton").css("visibility", "visible");
 		$("#feedback").text("Make your Guess!");
 		$("#count").text(0);
 		$("#guessList").html("");
@@ -91,6 +98,7 @@ function isHotOrCold(guess, toGuess){
 	} else {
 		diff = toGuess - guess;
 	}
+	console.log(guess, toGuess, diff);
 	switch (true){
 		case (diff > 50):
 			$("#feedback").text("REAAALLY COLD!");
