@@ -19,7 +19,15 @@ $(document).ready(function(){
 		 	return;
 		}
 
-		updateStage(Math.round($userGuess));
+		/*Round guess to avoid repetition, ex 1.0 and 1 
+		would yield two different results*/ 
+		$userGuess = Math.round($userGuess); 
+		if(!isRepeated($userGuess, guesses)){
+			updateStage($userGuess);
+		} else {
+			$("#feedback").text($userGuess + " was already chosen!");
+			return;
+		}
 	});
 
 	/*--- Display information modal box ---*/
@@ -62,6 +70,15 @@ function isValid(num){
 		return false;
 	}
 	return true;
+}
+
+//Check to see if current guess wasn't chosen already
+function isRepeated(guess, guesses){
+	for(var i = 0; i < guesses.length; i++){
+		if(guess === guesses[i]){
+			return true;
+		}
+	}
 }
 
 
