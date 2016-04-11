@@ -1,6 +1,8 @@
 
 $(document).ready(function(){
-	//call new game function on load and when clicked
+	var guessNum, secretNum, guesses;
+
+	/*call new game function on load and when clicked*/
 	newGame();
 	$(".new").click(function(){
 		newGame();
@@ -15,19 +17,18 @@ $(document).ready(function(){
   	$("a.close").click(function(){
   		$(".overlay").fadeOut(1000);
   	});
+
+  	/*Starts a new game and resets previous stats*/
+  	function newGame(){
+  		guessNum = 0;	
+		secretNum = getRandom();
+		guesses = [];
+		$("#feedback").text("Make your Guess!");
+		$("#count").text(0);
+		$("#guessList").html("");
+	}
 });
-
-/*Starts a new game and resets previous stats*/ 
-function newGame(){
-	var guessNum = 0;	
-	var secretNum = getRandom();
-	var guesses = [];
-
-	$("#feedback").text("Make your Guess!");
-	$("#count").text(guessNum);
-	$("#guessList").html("");
-}
-
+ 
 function getRandom(){
 	return Math.floor(Math.random() * (100)) + 1;
 }
