@@ -22,8 +22,10 @@ $(document).ready(function(){
 		/*Round guess to avoid repetition, ex 1.0 and 1 
 		would yield two different results*/ 
 		$userGuess = Math.round($userGuess); 
+		//If guess is not repeated cont game and update view.
 		if(!isRepeated($userGuess, guesses)){
 			updateStage($userGuess);
+			isHotOrCold(secretNum, $userGuess);
 		} else {
 			$("#feedback").text($userGuess + " was already chosen!");
 			return;
@@ -78,6 +80,33 @@ function isRepeated(guess, guesses){
 		if(guess === guesses[i]){
 			return true;
 		}
+	}
+}
+
+//Check to see how hot or cold the guess is
+function isHotOrCold(guess, toGuess){
+	var diff;
+	if(guess > toGuess){
+		diff = guess - toGuess;
+	} else {
+		diff = toGuess - guess;
+	}
+	switch (true){
+		case (diff > 50):
+			$("#feedback").text("REAAALLY COLD!");
+			break;
+		case (diff >= 30):
+			$("#feedback").text("COLD");
+			break;
+		case (diff >= 20):
+			$("#feedback").text("GETTING WARM");
+			break;
+		case (diff >= 10):
+			$("#feedback").text("HOT!");
+			break;
+		case (diff >= 0):
+			$("#feedback").text("VERY HOT!!!");
+			break;
 	}
 }
 
