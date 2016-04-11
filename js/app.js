@@ -3,6 +3,7 @@ $(document).ready(function(){
 	var guessNum, secretNum, guesses;
 
 	/*call new game function on load and when clicked*/
+	newGame();
 	$(".new").click(function(){
 		newGame();
 	});
@@ -17,8 +18,8 @@ $(document).ready(function(){
 			$("#feedback").text("Enter a number from 0 to 100");
 		 	return;
 		}
-		
-		console.log("valid");
+
+		updateStage(Math.round($userGuess));
 	});
 
 	/*--- Display information modal box ---*/
@@ -39,6 +40,14 @@ $(document).ready(function(){
 		$("#feedback").text("Make your Guess!");
 		$("#count").text(0);
 		$("#guessList").html("");
+	}
+
+	//Updates the game with the latest guess results.
+	function updateStage(guess){
+		guessNum++;
+		guesses.push(guess);
+		$("#guessList").append("<li>" + guess + "</li>");
+		$("#count").text(guessNum);
 	}
 });
  
