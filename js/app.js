@@ -2,8 +2,26 @@
 $(document).ready(function(){
 	var guessNum, secretNum, guesses;
 
-	/*call new game function on load and when clicked*/
-	newGame();
+	/*Starts a new game and resets previous stats*/
+  	function newGame(){
+  		guessNum = 0;	
+		secretNum = getRandom();
+		guesses = [];
+		$("#guessButton").css("visibility", "visible");
+		$("#feedback").text("Make your Guess!");
+		$("#count").text(0);
+		$("#guessList").html("");
+	}
+
+	//Updates the game with the latest guess results.
+	function updateStage(guess){
+		guessNum++;
+		guesses.push(guess);
+		$("#guessList").append("<li>" + guess + "</li>");
+		$("#count").text(guessNum);
+	}
+
+	/*Start new game*/
 	$(".new").click(function(){
 		newGame();
 	});
@@ -48,24 +66,7 @@ $(document).ready(function(){
   		$(".overlay").fadeOut(1000);
   	});
 
-  	/*Starts a new game and resets previous stats*/
-  	function newGame(){
-  		guessNum = 0;	
-		secretNum = getRandom();
-		guesses = [];
-		$("#guessButton").css("visibility", "visible");
-		$("#feedback").text("Make your Guess!");
-		$("#count").text(0);
-		$("#guessList").html("");
-	}
-
-	//Updates the game with the latest guess results.
-	function updateStage(guess){
-		guessNum++;
-		guesses.push(guess);
-		$("#guessList").append("<li>" + guess + "</li>");
-		$("#count").text(guessNum);
-	}
+  	newGame();  	
 });
  
 //Random number from 0 to 100
@@ -83,22 +84,14 @@ function isValid(num){
 
 //Check to see if current guess wasn't chosen already
 function isRepeated(guess, guesses){
-	for(var i = 0; i < guesses.length; i++){
-		if(guess === guesses[i]){
-			return true;
-		}
+	if(guesses.indexOf(guess) !== -1){
+		return true;
 	}
 }
 
 //Check to see how hot or cold the guess is
 function isHotOrCold(guess, toGuess){
-	var diff;
-	if(guess > toGuess){
-		diff = guess - toGuess;
-	} else {
-		diff = toGuess - guess;
-	}
-	console.log(guess, toGuess, diff);
+	var diff = Math.abs(guess - toGuess);
 	switch (true){
 		case (diff > 50):
 			$("#feedback").text("REAAALLY COLD!");
