@@ -1,114 +1,114 @@
 
 $(document).ready(function(){
-	var guessNum, secretNum, guesses;
+  var guessNum, secretNum, guesses;
 
-	/*Starts a new game and resets previous stats*/
-  	function newGame(){
-  		guessNum = 0;	
-		secretNum = getRandom();
-		guesses = [];
-		$("#guessButton").css("visibility", "visible");
-		$("#feedback").text("Make your Guess!");
-		$("#count").text(0);
-		$("#guessList").html("");
-	}
+  /*Starts a new game and resets previous stats*/
+    function newGame(){
+      guessNum = 0; 
+    secretNum = getRandom();
+    guesses = [];
+    $("#guessButton").css("visibility", "visible");
+    $("#feedback").text("Make your Guess!");
+    $("#count").text(0);
+    $("#guessList").html("");
+  }
 
-	//Updates the game with the latest guess results.
-	function updateStage(guess){
-		guessNum++;
-		guesses.push(guess);
-		$("#guessList").append("<li>" + guess + "</li>");
-		$("#count").text(guessNum);
-	}
+  //Updates the game with the latest guess results.
+  function updateStage(guess){
+    guessNum++;
+    guesses.push(guess);
+    $("#guessList").append("<li>" + guess + "</li>");
+    $("#count").text(guessNum);
+  }
 
-	/*Start new game*/
-	$(".new").click(function(){
-		newGame();
-	});
+  /*Start new game*/
+  $(".new").click(function(){
+    newGame();
+  });
 
-	//Grabs user input, checks to see if valid and continues with game.
-	$("#guessButton").click(function(e){
-		e.preventDefault();
-		var $userGuess = $("#userGuess").val();
-		$("#userGuess").val("");
-		
-		if($userGuess === "" || !isValid(+$userGuess)){
-			$("#feedback").text("Enter a number from 0 to 100");
-		 	return;
-		}
+  //Grabs user input, checks to see if valid and continues with game.
+  $("#guessButton").click(function(e){
+    e.preventDefault();
+    var userGuess = $("#userGuess").val();
+    $("#userGuess").val("");
+    
+    if(userGuess === "" || !isValid(+userGuess)){
+      $("#feedback").text("Enter a number from 0 to 100");
+      return;
+    }
 
-		/*Round guess to avoid repetition, ex 1.0 and 1 
-		would yield two different results*/ 
-		$userGuess = Math.round($userGuess); 
-		//If guess is not repeated cont game and update view.
-		if(!isRepeated($userGuess, guesses)){
-			updateStage($userGuess);
+    /*Round guess to avoid repetition, ex 1.0 and 1 
+    would yield two different results*/ 
+    userGuess = Math.round(userGuess); 
+    //If guess is not repeated cont game and update view.
+    if(!isRepeated(userGuess, guesses)){
+      updateStage(userGuess);
 
-			if($userGuess === secretNum){
-				$("#feedback").text("You won!!! Click new game to play again!");
-				$("#guessButton").css("visibility", "hidden");
-			} else {
-				isHotOrCold($userGuess, secretNum);
-			}
-		} else {
-			$("#feedback").text($userGuess + " was already chosen!");
-			return;
-		}
-	});
+      if(userGuess === secretNum){
+        $("#feedback").text("You won!!! Click new game to play again!");
+        $("#guessButton").css("visibility", "hidden");
+      } else {
+        isHotOrCold(userGuess, secretNum);
+      }
+    } else {
+      $("#feedback").text(userGuess + " was already chosen!");
+      return;
+    }
+  });
 
-	/*--- Display information modal box ---*/
-  	$(".what").click(function(){
-    	$(".overlay").fadeIn(1000);
-  	});
+  /*--- Display information modal box ---*/
+    $(".what").click(function(){
+      $(".overlay").fadeIn(1000);
+    });
 
-  	/*--- Hide information modal box ---*/
-  	$("a.close").click(function(){
-  		$(".overlay").fadeOut(1000);
-  	});
+    /*--- Hide information modal box ---*/
+    $("a.close").click(function(){
+      $(".overlay").fadeOut(1000);
+    });
 
-  	newGame();  	
+    newGame();    
 });
  
 //Random number from 0 to 100
 function getRandom(){
-	return Math.floor(Math.random() * 101);
+  return Math.floor(Math.random() * 101);
 }
 
 //Check user input and return if its valid or not
 function isValid(num){
-	if(isNaN(num) || num > 100 || num < 0 || num % 1 !== 0){
-		return false;
-	}
-	return true;
+  if(isNaN(num) || num > 100 || num < 0 || num % 1 !== 0){
+    return false;
+  }
+  return true;
 }
 
 //Check to see if current guess wasn't chosen already
 function isRepeated(guess, guesses){
-	if(guesses.indexOf(guess) !== -1){
-		return true;
-	}
+  if(guesses.indexOf(guess) !== -1){
+    return true;
+  }
 }
 
 //Check to see how hot or cold the guess is
 function isHotOrCold(guess, toGuess){
-	var diff = Math.abs(guess - toGuess);
-	switch (true){
-		case (diff > 50):
-			$("#feedback").text("REAAALLY COLD!");
-			break;
-		case (diff >= 30):
-			$("#feedback").text("COLD");
-			break;
-		case (diff >= 20):
-			$("#feedback").text("GETTING WARM");
-			break;
-		case (diff >= 10):
-			$("#feedback").text("HOT!");
-			break;
-		case (diff >= 0):
-			$("#feedback").text("VERY HOT!!!");
-			break;
-	}
+  var diff = Math.abs(guess - toGuess);
+  switch (true){
+    case (diff > 50):
+      $("#feedback").text("REAAALLY COLD!");
+      break;
+    case (diff >= 30):
+      $("#feedback").text("COLD");
+      break;
+    case (diff >= 20):
+      $("#feedback").text("GETTING WARM");
+      break;
+    case (diff >= 10):
+      $("#feedback").text("HOT!");
+      break;
+    case (diff >= 0):
+      $("#feedback").text("VERY HOT!!!");
+      break;
+  }
 }
 
 
